@@ -63,14 +63,4 @@ def activityNotifications2(expenditure, d):
         dist[expenditure[i]] += 1
     return res
 
-A = []
-import csv
-pathToInput = '/Users/nacerbenallou/Documents/HR/interviewPrep/input11.csv'
-with open(pathToInput) as csvfile:
-    inp = csv.reader(csvfile, delimiter=',')
-    for row in inp:
-        A = row
-
-B = list(map(lambda x:int(x),A))
-
 activityNotifications2(B,40001)
