@@ -62,5 +62,3 @@ def activityNotifications2(expenditure, d):
         dist[expenditure[i-d]] -= 1
         dist[expenditure[i]] += 1
     return res
-
-activityNotifications2(B,40001)
