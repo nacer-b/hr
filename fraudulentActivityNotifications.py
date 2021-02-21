@@ -1,4 +1,5 @@
 import bisect 
+import pandas as pd
 
 def median(a): # Important : a must be a sorted array
     N = len(a)
@@ -9,7 +10,7 @@ def median(a): # Important : a must be a sorted array
 
 def activityNotifications(expenditure, d):
     m = 0
-    res = 0
+    res = pd.Series(0,index=range(d, len(expenditure)))
     D = sorted(expenditure[0:d])
     for i in range(d, len(expenditure)-1):
         if d%2 == 0:
@@ -17,7 +18,7 @@ def activityNotifications(expenditure, d):
         else:
             m = D[d//2]
         if expenditure[i] >= 2*m:
-            res += 1
+            res[i] = 1
         bisect.insort_left(D, expenditure[i])
         del D[bisect.bisect_left(D, expenditure[i-d])]
     return res
@@ -49,16 +50,29 @@ def median2(dist, d):
     return res
 
 def activityNotifications2(expenditure, d):
-    res = 0
-    
+    res = pd.Series(0,index=range(d,len(expenditure)))
+    tgts = pd.Series(0,index=range(d,len(expenditure)))
     dist = [0]*201
     for i in range(d):
         dist[expenditure[i]] += 1
 
-    for i in range(d,len(expenditure)-1):
+    for i in range(d,len(expenditure)): 
         tgt = median2(dist, d)
+        tgts[i] = tgt
         if expenditure[i] >= tgt:
-            res += 1
+            res[i] = 1
         dist[expenditure[i-d]] -= 1
         dist[expenditure[i]] += 1
-    return res
+    return (res, tgts)
+
+A = []
+import csv
+pathToInput = 'inpfan.csv'
+with open(pathToInput) as csvfile:
+    inp = csv.reader(csvfile, delimiter=';')
+    for row in inp:
+        A = row
+
+B = list(map(lambda x:int(x),A))
+
+print(activityNotifications2(B,9999))
